@@ -14,7 +14,6 @@
   }
   body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; line-height: 1.5; letter-spacing: -0.01em; }
 
-  /* LOGIN */
   .login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
   .login-card { background: var(--panel); border: 1px solid var(--border); border-radius: 20px; padding: 40px; width: 100%; max-width: 400px; }
   .login-card h1 { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.03em; }
@@ -26,7 +25,6 @@
   .login-card button:disabled { opacity: 0.5; cursor: not-allowed; }
   .login-error { color: #fca5a5; font-size: 13px; margin-top: 12px; min-height: 18px; }
 
-  /* APP */
   .app { display: none; grid-template-columns: 260px 1fr; min-height: 100vh; }
   .app.visible { display: grid; }
   @media (max-width: 900px) { .app.visible { grid-template-columns: 1fr; } .sidebar { display: none !important; } }
@@ -414,6 +412,137 @@
 
 <script>
 /* =========================================================
+   DEFAULTS — MUST MATCH index.html
+   ========================================================= */
+const DEFAULT_DATA = {
+  brand: { name: "Nebulance", navCta: "Start a project", navLinks: [
+    { label: "Services", href: "#services" },
+    { label: "Coverage", href: "#coverage" },
+    { label: "Process", href: "#process" },
+    { label: "Principles", href: "#principles" },
+    { label: "Clients", href: "#reviews" }
+  ]},
+  hero: {
+    badge: "Accepting select clients · Q2 2026 · Global",
+    titleLine1: "We engineer",
+    titleLine2Em: "coherence",
+    titleLine2Rest: " in",
+    titleLine3: "chaotic systems.",
+    subtitle: "Nebulance is an international engineering studio building AI systems, automation and digital infrastructure for companies that have outgrown spreadsheets. Headquartered in India, working with teams across four continents.",
+    btn1: { text: "Start a conversation", href: "#contact" },
+    btn2: { text: "Explore systems", href: "#services" },
+    stats: [
+      { label: "Based", value: "Hyderabad · India" },
+      { label: "Clients", value: "12 countries served" },
+      { label: "Deployments", value: "40+ systems live" },
+      { label: "Response", value: "Under 24 hours · Any timezone" }
+    ]
+  },
+  strip: { items: ["AI Call Agents","Intelligent Search","Lead Pipelines","Web Systems","Technical SEO","Custom Workflows"] },
+  coverage: {
+    tag: "Global coverage",
+    heading: "One studio.",
+    headingEm: "Four continents.",
+    lead: "We work with founders, operators and engineering leaders worldwide. Async-first, timezone-aware, and fluent in the realities of cross-border delivery.",
+    regions: [
+      { name: "Americas", flag: "🇺🇸", cities: "New York · San Francisco · Toronto", tz: "America/New_York", status: "Clients active" },
+      { name: "Europe", flag: "🇬🇧", cities: "London · Berlin · Stockholm", tz: "Europe/London", status: "Clients active" },
+      { name: "Middle East", flag: "🇦🇪", cities: "Dubai · Riyadh · Doha", tz: "Asia/Dubai", status: "Clients active" },
+      { name: "Asia Pacific", flag: "🇸🇬", cities: "Singapore · Sydney · Bangalore", tz: "Asia/Singapore", status: "Clients active" }
+    ]
+  },
+  manifesto: {
+    tag: "Thesis · 01",
+    text: "Most companies don't need more tools. ",
+    dim: "They need fewer,",
+    middle: " built ",
+    em: "properly",
+    end: " — with the discipline of real engineering."
+  },
+  services: {
+    tag: "Capabilities",
+    heading: "What we ",
+    headingEm: "actually",
+    headingEnd: " build.",
+    lead: "Six disciplines. One coherent system. Every engagement is scoped, engineered, and shipped with the same standard we'd hold ourselves to.",
+    items: [
+      { num: "01 / 06", title: "AI Call ", titleEm: "Agents", desc: "Voice systems that hold real conversations — inbound, outbound, and everything in between." },
+      { num: "02 / 06", title: "AI Search & ", titleEm: "Discovery", desc: "Structured knowledge and retrieval systems built for how people actually search in 2026." },
+      { num: "03 / 06", title: "Lead ", titleEm: "Generation", desc: "Qualification, scoring, and routing pipelines that feed your sales team only what matters." },
+      { num: "04 / 06", title: "Website ", titleEm: "Systems", desc: "Fast, accessible, conversion-grade front-ends engineered for teams that care about craft." },
+      { num: "05 / 06", title: "Technical ", titleEm: "SEO", desc: "Architecture, structured data, and content systems tuned for traditional and AI-first discovery." },
+      { num: "06 / 06", title: "Custom AI ", titleEm: "Workflows", desc: "End-to-end automation connecting models, APIs, and your business logic into one system." }
+    ]
+  },
+  process: {
+    tag: "Method",
+    heading: "Architecture",
+    headingEm: "before automation.",
+    lead: "We don't start with tools. We start by understanding the actual shape of the problem — then we design the smallest system that solves it well.",
+    steps: [
+      { num: "01 / 04", title: "Audit & Deconstruct", desc: "We map every workflow, dependency, and decision point. We find the friction. We find the waste. We do not skip this." },
+      { num: "02 / 04", title: "Architect & Specify", desc: "Data flows, system boundaries, failure modes, decision logic — all defined before a line of code is written or a model is called." },
+      { num: "03 / 04", title: "Build & Integrate", desc: "Agents, APIs, data pipelines and infrastructure assembled into one operational system. Tested against real edge cases." },
+      { num: "04 / 04", title: "Deploy & Operate", desc: "We ship. We monitor. We iterate. Systems evolve with the business — they don't get abandoned at launch." }
+    ]
+  },
+  principles: {
+    tag: "Principles",
+    heading: "How we ",
+    headingEm: "actually",
+    headingEnd: " work.",
+    lead: "Three commitments that shape every system we ship. No exceptions, no shortcuts, no borrowed templates.",
+    items: [
+      { icon: "⌁", num: "01 / 03", title: "Engineering-grade ", titleEm: "precision", desc: "Every system is designed, tested, and refined until the technology becomes invisible to the people using it." },
+      { icon: "∞", num: "02 / 03", title: "Scalable by ", titleEm: "default", desc: "What works for ten users should have a path to ten thousand. We design for the load before you have it." },
+      { icon: "◎", num: "03 / 03", title: "Designed around ", titleEm: "reality", desc: "Technology follows business architecture, not the other way around. We fit the system to your company, not a template." }
+    ]
+  },
+  reviews: {
+    tag: "Client voices",
+    heading: "Quiet systems. ",
+    headingEm: "Visible",
+    headingEnd: " results.",
+    items: [
+      { quote: "Nebulance replaced three tools and two contractors with <em>one coherent system.</em> It just runs.", name: "Arjun Mehta", role: "Founder · Vertex Realty · Dubai", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80&auto=format&fit=crop" },
+      { quote: "They understood our operations better than we did in <em>two weeks.</em> The build was cleaner than any agency we've worked with.", name: "Priya Nair", role: "COO · Lattice Legal · London", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80&auto=format&fit=crop" },
+      { quote: "Their focus on the architecture <em>behind</em> the automation is unusual. Most vendors sell tools. Nebulance sells systems.", name: "Daniel Cole", role: "VP Engineering · Northbound · New York", avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120&q=80&auto=format&fit=crop" },
+      { quote: "We went from <em>nine</em> disconnected tools to a single pipeline. The team feels it. Our customers feel it.", name: "Sarah Whitfield", role: "Head of Ops · Meridian · Singapore", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80&auto=format&fit=crop" },
+      { quote: "Nebulance is the only studio I've worked with that treats <em>architecture</em> as the product. Everything else follows.", name: "Rahul Kapoor", role: "CTO · Signal Labs · Berlin", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&q=80&auto=format&fit=crop" },
+      { quote: "Our lead response time dropped from <em>hours to seconds.</em> That changed our entire sales motion.", name: "Emma Lindqvist", role: "Growth · Nordic Fintech · Stockholm", avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=120&q=80&auto=format&fit=crop" }
+    ]
+  },
+  cta: {
+    eyebrow: "Start a conversation · Any timezone",
+    title: "Ready to build ",
+    titleEm: "something coherent?",
+    sub: "Tell us what is slowing your business down. We'll map the system that should replace it — usually in under a week. We reply within 24 hours, worldwide.",
+    btn1: { text: "hello@nebulance.in", href: "mailto:hello@nebulance.in" },
+    btn2: { text: "Book a 30-min call", href: "https://cal.com" }
+  },
+  footer: {
+    desc: "An international engineering studio building AI systems, automation, and digital infrastructure for companies that refuse to be ordinary.",
+    founder: { name: "Varshath G", title: "Founder & CEO · Nebulance", email: "Varshath@nebulance.in", photo: "varshath.jpeg" },
+    columns: [
+      { title: "Navigate", links: [
+        { label: "Services", href: "#services" }, { label: "Coverage", href: "#coverage" },
+        { label: "Process", href: "#process" }, { label: "Principles", href: "#principles" }, { label: "Clients", href: "#reviews" }
+      ]},
+      { title: "Contact", links: [
+        { label: "hello@nebulance.in", href: "mailto:hello@nebulance.in" },
+        { label: "LinkedIn", href: "#" }, { label: "X / Twitter", href: "#" }
+      ]},
+      { title: "Studio", links: [
+        { label: "Hyderabad, India", href: "#" }, { label: "Remote-first", href: "#" },
+        { label: "Working across 12 countries", href: "#" }
+      ]}
+    ],
+    bottomText: "Systems operational · Response under 24h",
+    copyright: "Nebulance"
+  }
+};
+
+/* =========================================================
    API HELPERS
    ========================================================= */
 const API = "/api/data";
@@ -426,10 +555,8 @@ async function apiGet(action) {
 
 async function apiPost(action, body = {}) {
   const res = await fetch(`${API}?action=${action}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(body)
+    method: "POST", headers: { "Content-Type": "application/json" },
+    credentials: "include", body: JSON.stringify(body)
   });
   const json = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(json.error || ("HTTP " + res.status));
@@ -438,21 +565,13 @@ async function apiPost(action, body = {}) {
 
 async function apiPut(action, body) {
   const res = await fetch(`${API}?action=${action}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify(body)
+    method: "PUT", headers: { "Content-Type": "application/json" },
+    credentials: "include", body: JSON.stringify(body)
   });
   const json = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(json.error || ("HTTP " + res.status));
   return json;
 }
-
-/* =========================================================
-   DEFAULTS (fallback / seed)
-   ========================================================= */
-const DEFAULT_DATA = { /* SAME AS index.html DEFAULT_DATA */ };
-/* Paste the same DEFAULT_DATA object from index.html here */
 
 /* =========================================================
    STATE
@@ -490,10 +609,8 @@ function deepMerge(target, source) {
    LOGIN
    ========================================================= */
 async function checkAuth() {
-  try {
-    const r = await apiGet("me");
-    return r.authenticated === true;
-  } catch { return false; }
+  try { const r = await apiGet("me"); return r.authenticated === true; }
+  catch { return false; }
 }
 
 async function login() {
@@ -502,12 +619,9 @@ async function login() {
   $("loginError").textContent = "";
   $("loginBtn").disabled = true;
   $("loginBtn").textContent = "Signing in…";
-  try {
-    await apiPost("login", { username, password });
-    await boot();
-  } catch (e) {
-    $("loginError").textContent = e.message || "Login failed";
-  } finally {
+  try { await apiPost("login", { username, password }); await boot(); }
+  catch (e) { $("loginError").textContent = e.message || "Login failed"; }
+  finally {
     $("loginBtn").disabled = false;
     $("loginBtn").textContent = "Sign in";
   }
@@ -522,10 +636,15 @@ async function logout() {
    LOAD / SAVE
    ========================================================= */
 async function loadContent() {
-  const r = await apiGet("content");
-  state = deepMerge(structuredClone(DEFAULT_DATA), r.data || {});
-  if (r.updated_at) {
-    $("lastSavedLine").textContent = "Last saved: " + new Date(r.updated_at).toLocaleString();
+  try {
+    const r = await apiGet("content");
+    state = deepMerge(structuredClone(DEFAULT_DATA), r.data || {});
+    if (r.updated_at) {
+      $("lastSavedLine").textContent = "Last saved: " + new Date(r.updated_at).toLocaleString();
+    }
+  } catch (e) {
+    showToast("Load failed — using defaults", true);
+    state = structuredClone(DEFAULT_DATA);
   }
   hydrateForm();
   updateRawPreview();
@@ -554,6 +673,16 @@ async function saveContent() {
    HYDRATE / COLLECT
    ========================================================= */
 function hydrateForm() {
+  // Safe-guard: ensure all sections exist (protects against partial saves)
+  if (!state.hero.stats) state.hero.stats = [];
+  if (!state.strip.items) state.strip.items = [];
+  if (!state.coverage.regions) state.coverage.regions = [];
+  if (!state.services.items) state.services.items = [];
+  if (!state.process.steps) state.process.steps = [];
+  if (!state.principles.items) state.principles.items = [];
+  if (!state.reviews.items) state.reviews.items = [];
+  if (!state.footer.columns) state.footer.columns = [];
+
   $("brandName").value = state.brand.name;
   $("brandNavCta").value = state.brand.navCta;
   $("brandNavLinks").value = arrToPairs(state.brand.navLinks);
@@ -702,7 +831,7 @@ function collectFormData() {
 }
 
 /* =========================================================
-   DYNAMIC RENDERERS (inline handlers mutate state directly)
+   DYNAMIC RENDERERS
    ========================================================= */
 function renderStats() {
   $("heroStatsContainer").innerHTML = state.hero.stats.map((s, i) => `
@@ -901,9 +1030,7 @@ function importJSON(e) {
       hydrateForm();
       updateRawPreview();
       showToast("Imported — click Save to persist");
-    } catch (err) {
-      showToast("Invalid JSON", true);
-    }
+    } catch (err) { showToast("Invalid JSON", true); }
   };
   reader.readAsText(file);
   e.target.value = "";
@@ -957,12 +1084,5 @@ $("loginPass").addEventListener("keydown", e => { if (e.key === "Enter") login()
 })();
 </script>
 
-<!-- ⚠️ IMPORTANT: paste DEFAULT_DATA here from index.html so the admin
-     form can seed if the DB row is empty. Replace the placeholder line:
-
-     const DEFAULT_DATA = { /* SAME AS index.html DEFAULT_DATA */ };
-
-     with the full DEFAULT_DATA object from index.html.
--->
 </body>
 </html>
