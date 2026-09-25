@@ -51,14 +51,16 @@
   .panel-title { font-size: 12px; font-family: monospace; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue-bright); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
   .panel-title::before { content: ""; width: 16px; height: 1px; background: var(--blue-bright); }
 
-  .field { margin-bottom: 18px; }
+  .field { margin-bottom: 20px; }
   .field:last-child { margin-bottom: 0; }
-  label { display: block; font-size: 12px; font-weight: 500; color: var(--ink-soft); margin-bottom: 6px; letter-spacing: 0.02em; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 4px; letter-spacing: 0.005em; }
+  .label-desc { font-size: 11.5px; color: var(--ink-mute); margin-bottom: 8px; line-height: 1.4; }
   input[type="text"], input[type="email"], input[type="url"], textarea {
     width: 100%; padding: 11px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border);
     border-radius: 10px; color: var(--ink); font-family: inherit; font-size: 13.5px;
     transition: all 0.2s; outline: none;
   }
+  input::placeholder, textarea::placeholder { color: rgba(245,245,247,0.25); }
   input:focus, textarea:focus { border-color: var(--blue); background: rgba(24,119,242,0.06); box-shadow: 0 0 0 3px rgba(24,119,242,0.15); }
   textarea { min-height: 90px; resize: vertical; line-height: 1.55; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -106,6 +108,15 @@
   .badge.red { background: rgba(239,68,68,0.15); color: #fca5a5; }
 
   .status-line { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink-mute); font-family: monospace; margin-top: 6px; }
+
+  /* NEW: visual preview strip */
+  .preview-strip {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; border-radius: 12px;
+    background: rgba(24,119,242,0.08); border: 1px solid rgba(24,119,242,0.2);
+    margin-bottom: 20px; font-size: 12px; color: var(--ink-soft);
+  }
+  .preview-strip strong { color: var(--blue-bright); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -155,7 +166,7 @@
           <p>Every field on the landing page. Saved to Neon Postgres.</p>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <a href="/" target="_blank" class="btn btn-secondary btn-sm">↗ Preview</a>
+          <a href="/" target="_blank" class="btn btn-secondary btn-sm">↗ Preview Site</a>
           <button class="btn btn-secondary btn-sm" id="logoutBtn">Sign out</button>
         </div>
       </div>
@@ -164,42 +175,121 @@
 
       <!-- GENERAL -->
       <div class="tab-pane active" data-pane="general">
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> Top navigation bar (all pages)</span>
+        </div>
+
         <div class="panel">
-          <div class="panel-title">Brand & Navigation</div>
+          <div class="panel-title">Brand Identity</div>
           <div class="field-row">
-            <div class="field"><label>Brand Name</label><input type="text" id="brandName" /></div>
-            <div class="field"><label>Nav CTA Text</label><input type="text" id="brandNavCta" /></div>
+            <div class="field">
+              <label>Brand Name</label>
+              <div class="label-desc">The name in the top-left logo. Also appears in the footer.</div>
+              <input type="text" id="brandName" placeholder="Nebulance" />
+            </div>
+            <div class="field">
+              <label>Nav CTA Button Text</label>
+              <div class="label-desc">The blue pill button top-right of the nav bar.</div>
+              <input type="text" id="brandNavCta" placeholder="Start a project" />
+            </div>
           </div>
           <div class="field">
-            <label>Navigation Links (Label|Href per line)</label>
-            <textarea id="brandNavLinks" style="min-height:120px;"></textarea>
+            <label>Navigation Menu Links</label>
+            <div class="label-desc">One link per line. Format: <code style="background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;">Label|#anchor</code> — e.g. <code style="background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;">Services|#services</code></div>
+            <textarea id="brandNavLinks" style="min-height:120px;" placeholder="Services|#services&#10;Coverage|#coverage&#10;Process|#process"></textarea>
           </div>
         </div>
       </div>
 
       <!-- HERO -->
       <div class="tab-pane" data-pane="hero">
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> Top of the page — the giant headline area</span>
+        </div>
+
         <div class="panel">
-          <div class="panel-title">Hero Content</div>
-          <div class="field"><label>Badge Text</label><input type="text" id="heroBadge" /></div>
-          <div class="field-row-3">
-            <div class="field"><label>Title Line 1</label><input type="text" id="heroTitleLine1" /></div>
-            <div class="field"><label>Title Line 2 (italic em)</label><input type="text" id="heroTitleLine2Em" /></div>
-            <div class="field"><label>Title Line 2 (rest)</label><input type="text" id="heroTitleLine2Rest" /></div>
-          </div>
-          <div class="field"><label>Title Line 3</label><input type="text" id="heroTitleLine3" /></div>
-          <div class="field"><label>Subtitle</label><textarea id="heroSubtitle"></textarea></div>
-          <div class="field-row">
-            <div class="field"><label>Primary Button Text</label><input type="text" id="heroBtn1Text" /></div>
-            <div class="field"><label>Primary Button Href</label><input type="text" id="heroBtn1Href" /></div>
-          </div>
-          <div class="field-row">
-            <div class="field"><label>Secondary Button Text</label><input type="text" id="heroBtn2Text" /></div>
-            <div class="field"><label>Secondary Button Href</label><input type="text" id="heroBtn2Href" /></div>
+          <div class="panel-title">Hero Badge</div>
+          <div class="field">
+            <label>Pill Badge Text</label>
+            <div class="label-desc">The small rounded pill above the headline. Usually an availability notice.</div>
+            <input type="text" id="heroBadge" placeholder="Accepting select clients · Q2 2026 · Global" />
           </div>
         </div>
+
         <div class="panel">
-          <div class="panel-title">Trust Stats</div>
+          <div class="panel-title">Hero Headline</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>The headline renders as <strong>3 stacked lines</strong>. Line 2 is split into two parts so one word can be italic/blue.</span>
+          </div>
+
+          <div class="field">
+            <label>Line 1 — Full text</label>
+            <div class="label-desc">First row of the headline.</div>
+            <input type="text" id="heroTitleLine1" placeholder="We engineer" />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label>Line 2 — Italic (blue) word</label>
+              <div class="label-desc">The one word that gets styled in italic serif + blue. No spaces needed.</div>
+              <input type="text" id="heroTitleLine2Em" placeholder="coherence" />
+            </div>
+            <div class="field">
+              <label>Line 2 — Rest of the line</label>
+              <div class="label-desc">Text that follows the italic word on the same line. Start with a space if needed.</div>
+              <input type="text" id="heroTitleLine2Rest" placeholder=" in" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Line 3 — Full text</label>
+            <div class="label-desc">Third row of the headline.</div>
+            <input type="text" id="heroTitleLine3" placeholder="chaotic systems." />
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Hero Subtitle</div>
+          <div class="field">
+            <label>Supporting Paragraph</label>
+            <div class="label-desc">Sits under the headline. Explains what you do in 1–3 sentences.</div>
+            <textarea id="heroSubtitle" placeholder="Nebulance is an international engineering studio..."></textarea>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Hero Buttons</div>
+          <div class="field-row">
+            <div class="field">
+              <label>Primary Button — Text</label>
+              <div class="label-desc">The solid blue button.</div>
+              <input type="text" id="heroBtn1Text" placeholder="Start a conversation" />
+            </div>
+            <div class="field">
+              <label>Primary Button — Link</label>
+              <div class="label-desc">Where it goes when clicked. Usually <code>#contact</code> or a full URL.</div>
+              <input type="text" id="heroBtn1Href" placeholder="#contact" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Secondary Button — Text</label>
+              <div class="label-desc">The text-only link next to the primary button.</div>
+              <input type="text" id="heroBtn2Text" placeholder="Explore systems" />
+            </div>
+            <div class="field">
+              <label>Secondary Button — Link</label>
+              <div class="label-desc">Where it goes when clicked.</div>
+              <input type="text" id="heroBtn2Href" placeholder="#services" />
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Trust Stats (bottom row of hero)</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Four quick facts shown as a row under the hero buttons. Each has a <strong>label</strong> (small caps) and a <strong>value</strong> (bold).</span>
+          </div>
           <div id="heroStatsContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addStat()">+ Add Stat</button>
         </div>
@@ -207,28 +297,56 @@
 
       <!-- STRIP -->
       <div class="tab-pane" data-pane="strip">
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> Thin scrolling bar just below the hero</span>
+        </div>
         <div class="panel">
-          <div class="panel-title">Marquee Strip Items</div>
+          <div class="panel-title">Marquee Items</div>
           <div class="field">
-            <label>Items (one per line)</label>
-            <textarea id="stripItems" style="min-height:160px;"></textarea>
+            <label>Scroll Items</label>
+            <div class="label-desc">One phrase per line. They loop infinitely from right to left. Keep each one short (2–5 words) for readability.</div>
+            <textarea id="stripItems" style="min-height:160px;" placeholder="AI Call Agents&#10;Intelligent Search&#10;Lead Pipelines"></textarea>
           </div>
         </div>
       </div>
 
       <!-- COVERAGE -->
       <div class="tab-pane" data-pane="coverage">
-        <div class="panel">
-          <div class="panel-title">Coverage Header</div>
-          <div class="field"><label>Section Tag</label><input type="text" id="coverageTag" /></div>
-          <div class="field-row">
-            <div class="field"><label>Heading (main)</label><input type="text" id="coverageHeading" /></div>
-            <div class="field"><label>Heading (italic em)</label><input type="text" id="coverageHeadingEm" /></div>
-          </div>
-          <div class="field"><label>Lead Paragraph</label><textarea id="coverageLead"></textarea></div>
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> "Global coverage" section with 4 timezone cards</span>
         </div>
+
         <div class="panel">
-          <div class="panel-title">Region Cards</div>
+          <div class="panel-title">Section Header</div>
+          <div class="field">
+            <label>Small Tag Above Heading</label>
+            <div class="label-desc">Tiny mono-spaced label. Usually says "Global coverage" or similar.</div>
+            <input type="text" id="coverageTag" placeholder="Global coverage" />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Heading — Main text</label>
+              <div class="label-desc">Normal (non-italic) part of the heading.</div>
+              <input type="text" id="coverageHeading" placeholder="One studio." />
+            </div>
+            <div class="field">
+              <label>Heading — Italic (blue) part</label>
+              <div class="label-desc">The part that gets the italic + blue treatment. Appears on its own line.</div>
+              <input type="text" id="coverageHeadingEm" placeholder="Four continents." />
+            </div>
+          </div>
+          <div class="field">
+            <label>Intro Paragraph</label>
+            <div class="label-desc">Appears to the right of the heading on desktop.</div>
+            <textarea id="coverageLead" placeholder="We work with founders, operators..."></textarea>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Timezone Region Cards</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Each card shows a <strong>live local time</strong> that updates every 30 seconds. Timezone must be a valid IANA name.</span>
+          </div>
           <div id="coverageContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addRegion()">+ Add Region</button>
         </div>
@@ -236,33 +354,91 @@
 
       <!-- MANIFESTO -->
       <div class="tab-pane" data-pane="manifesto">
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> Large italic quote block, mid-page</span>
+        </div>
         <div class="panel">
-          <div class="panel-title">Manifesto</div>
-          <div class="field"><label>Section Tag</label><input type="text" id="manifestoTag" /></div>
-          <div class="field"><label>Opening text</label><input type="text" id="manifestoText" /></div>
-          <div class="field-row-3">
-            <div class="field"><label>Dim text</label><input type="text" id="manifestoDim" /></div>
-            <div class="field"><label>Middle text</label><input type="text" id="manifestoMiddle" /></div>
-            <div class="field"><label>Emphasized (italic)</label><input type="text" id="manifestoEm" /></div>
+          <div class="panel-title">Manifesto / Thesis Quote</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>The quote is built from <strong>5 fragments</strong> so you can style parts of it differently (dim, italic, normal).</span>
           </div>
-          <div class="field"><label>Closing text</label><input type="text" id="manifestoEnd" /></div>
+
+          <div class="field">
+            <label>Small Tag Above Quote</label>
+            <div class="label-desc">Tiny mono label on the left. e.g. "Thesis · 01".</div>
+            <input type="text" id="manifestoTag" placeholder="Thesis · 01" />
+          </div>
+
+          <div class="field">
+            <label>Opening Text</label>
+            <div class="label-desc">Normal-weight text at the start of the sentence.</div>
+            <input type="text" id="manifestoText" placeholder="Most companies don't need more tools. " />
+          </div>
+
+          <div class="field-row-3">
+            <div class="field">
+              <label>Dimmed Text</label>
+              <div class="label-desc">Faded grey. Usually the "negative" clause.</div>
+              <input type="text" id="manifestoDim" placeholder="They need fewer," />
+            </div>
+            <div class="field">
+              <label>Middle Connector</label>
+              <div class="label-desc">Short linking phrase. Often just " built ".</div>
+              <input type="text" id="manifestoMiddle" placeholder=" built " />
+            </div>
+            <div class="field">
+              <label>Emphasized (italic blue) Word</label>
+              <div class="label-desc">The word that stands out — italic serif + blue.</div>
+              <input type="text" id="manifestoEm" placeholder="properly" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Closing Text</label>
+            <div class="label-desc">Normal text after the emphasized word. Include leading punctuation if needed.</div>
+            <input type="text" id="manifestoEnd" placeholder=" — with the discipline of real engineering." />
+          </div>
         </div>
       </div>
 
       <!-- SERVICES -->
       <div class="tab-pane" data-pane="services">
-        <div class="panel">
-          <div class="panel-title">Services Header</div>
-          <div class="field"><label>Section Tag</label><input type="text" id="servicesTag" /></div>
-          <div class="field-row-3">
-            <div class="field"><label>Heading (main)</label><input type="text" id="servicesHeading" /></div>
-            <div class="field"><label>Heading (italic em)</label><input type="text" id="servicesHeadingEm" /></div>
-            <div class="field"><label>Heading (end)</label><input type="text" id="servicesHeadingEnd" /></div>
-          </div>
-          <div class="field"><label>Lead Paragraph</label><textarea id="servicesLead"></textarea></div>
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> "Capabilities" section — 6-card grid</span>
         </div>
+
         <div class="panel">
-          <div class="panel-title">Service Cards</div>
+          <div class="panel-title">Section Header</div>
+          <div class="field">
+            <label>Small Tag Above Heading</label>
+            <div class="label-desc">Tiny mono label. e.g. "Capabilities".</div>
+            <input type="text" id="servicesTag" placeholder="Capabilities" />
+          </div>
+          <div class="field-row-3">
+            <div class="field">
+              <label>Heading — Before the italic word</label>
+              <input type="text" id="servicesHeading" placeholder="What we " />
+            </div>
+            <div class="field">
+              <label>Heading — Italic (blue) word</label>
+              <input type="text" id="servicesHeadingEm" placeholder="actually" />
+            </div>
+            <div class="field">
+              <label>Heading — After the italic word</label>
+              <input type="text" id="servicesHeadingEnd" placeholder=" build." />
+            </div>
+          </div>
+          <div class="field">
+            <label>Intro Paragraph</label>
+            <textarea id="servicesLead" placeholder="Six disciplines. One coherent system..."></textarea>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Service Cards (grid of 6)</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Each card has a <strong>number</strong>, a two-part title, and a short description.</span>
+          </div>
           <div id="servicesContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addService()">+ Add Service</button>
         </div>
@@ -270,17 +446,37 @@
 
       <!-- PROCESS -->
       <div class="tab-pane" data-pane="process">
-        <div class="panel">
-          <div class="panel-title">Process Header</div>
-          <div class="field"><label>Section Tag</label><input type="text" id="processTag" /></div>
-          <div class="field-row">
-            <div class="field"><label>Heading (main)</label><input type="text" id="processHeading" /></div>
-            <div class="field"><label>Heading (italic em)</label><input type="text" id="processHeadingEm" /></div>
-          </div>
-          <div class="field"><label>Lead Paragraph</label><textarea id="processLead"></textarea></div>
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> "Method" section — vertical numbered list</span>
         </div>
+
+        <div class="panel">
+          <div class="panel-title">Section Header</div>
+          <div class="field">
+            <label>Small Tag Above Heading</label>
+            <input type="text" id="processTag" placeholder="Method" />
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Heading — Line 1</label>
+              <input type="text" id="processHeading" placeholder="Architecture" />
+            </div>
+            <div class="field">
+              <label>Heading — Line 2 (italic blue)</label>
+              <input type="text" id="processHeadingEm" placeholder="before automation." />
+            </div>
+          </div>
+          <div class="field">
+            <label>Intro Paragraph</label>
+            <textarea id="processLead" placeholder="We don't start with tools..."></textarea>
+          </div>
+        </div>
+
         <div class="panel">
           <div class="panel-title">Process Steps</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Each row shows on the left: <strong>number</strong>, then <strong>title</strong>, then <strong>description</strong>.</span>
+          </div>
           <div id="processContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addProcess()">+ Add Step</button>
         </div>
@@ -288,18 +484,41 @@
 
       <!-- PRINCIPLES -->
       <div class="tab-pane" data-pane="principles">
-        <div class="panel">
-          <div class="panel-title">Principles Header</div>
-          <div class="field"><label>Section Tag</label><input type="text" id="principlesTag" /></div>
-          <div class="field-row-3">
-            <div class="field"><label>Heading (main)</label><input type="text" id="principlesHeading" /></div>
-            <div class="field"><label>Heading (italic em)</label><input type="text" id="principlesHeadingEm" /></div>
-            <div class="field"><label>Heading (end)</label><input type="text" id="principlesHeadingEnd" /></div>
-          </div>
-          <div class="field"><label>Lead Paragraph</label><textarea id="principlesLead"></textarea></div>
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> "Principles" section — 3 cards with icons</span>
         </div>
+
+        <div class="panel">
+          <div class="panel-title">Section Header</div>
+          <div class="field">
+            <label>Small Tag Above Heading</label>
+            <input type="text" id="principlesTag" placeholder="Principles" />
+          </div>
+          <div class="field-row-3">
+            <div class="field">
+              <label>Heading — Before the italic word</label>
+              <input type="text" id="principlesHeading" placeholder="How we " />
+            </div>
+            <div class="field">
+              <label>Heading — Italic (blue) word</label>
+              <input type="text" id="principlesHeadingEm" placeholder="actually" />
+            </div>
+            <div class="field">
+              <label>Heading — After the italic word</label>
+              <input type="text" id="principlesHeadingEnd" placeholder=" work." />
+            </div>
+          </div>
+          <div class="field">
+            <label>Intro Paragraph</label>
+            <textarea id="principlesLead" placeholder="Three commitments that shape every system..."></textarea>
+          </div>
+        </div>
+
         <div class="panel">
           <div class="panel-title">Principle Cards</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Each card has an <strong>icon</strong>, a <strong>number</strong>, a two-part title, and a description.</span>
+          </div>
           <div id="principlesContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addPrinciple()">+ Add Principle</button>
         </div>
@@ -307,17 +526,37 @@
 
       <!-- REVIEWS -->
       <div class="tab-pane" data-pane="reviews">
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> "Client voices" section — horizontal carousel</span>
+        </div>
+
         <div class="panel">
-          <div class="panel-title">Reviews Header</div>
-          <div class="field"><label>Section Tag</label><input type="text" id="reviewsTag" /></div>
+          <div class="panel-title">Section Header</div>
+          <div class="field">
+            <label>Small Tag Above Heading</label>
+            <input type="text" id="reviewsTag" placeholder="Client voices" />
+          </div>
           <div class="field-row-3">
-            <div class="field"><label>Heading (main)</label><input type="text" id="reviewsHeading" /></div>
-            <div class="field"><label>Heading (italic em)</label><input type="text" id="reviewsHeadingEm" /></div>
-            <div class="field"><label>Heading (end)</label><input type="text" id="reviewsHeadingEnd" /></div>
+            <div class="field">
+              <label>Heading — Before the italic word</label>
+              <input type="text" id="reviewsHeading" placeholder="Quiet systems. " />
+            </div>
+            <div class="field">
+              <label>Heading — Italic (blue) word</label>
+              <input type="text" id="reviewsHeadingEm" placeholder="Visible" />
+            </div>
+            <div class="field">
+              <label>Heading — After the italic word</label>
+              <input type="text" id="reviewsHeadingEnd" placeholder=" results." />
+            </div>
           </div>
         </div>
+
         <div class="panel">
           <div class="panel-title">Review Cards</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Each card has a 5-star rating, a <strong>quote</strong>, and the author's <strong>name, role, avatar</strong>. Inside the quote you can wrap words with <code>&lt;em&gt;word&lt;/em&gt;</code> to make them italic blue.</span>
+          </div>
           <div id="reviewsContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addReview()">+ Add Review</button>
         </div>
@@ -325,57 +564,120 @@
 
       <!-- CTA -->
       <div class="tab-pane" data-pane="cta">
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> Big centered "Ready to build something coherent?" block</span>
+        </div>
+
         <div class="panel">
           <div class="panel-title">Call To Action</div>
-          <div class="field"><label>Eyebrow Text</label><input type="text" id="ctaEyebrow" /></div>
-          <div class="field-row">
-            <div class="field"><label>Title (main)</label><input type="text" id="ctaTitle" /></div>
-            <div class="field"><label>Title (italic em)</label><input type="text" id="ctaTitleEm" /></div>
-          </div>
-          <div class="field"><label>Subtitle</label><textarea id="ctaSub"></textarea></div>
-          <div class="field-row">
-            <div class="field"><label>Primary Button Text</label><input type="text" id="ctaBtn1Text" /></div>
-            <div class="field"><label>Primary Button Href</label><input type="text" id="ctaBtn1Href" /></div>
+          <div class="field">
+            <label>Small Eyebrow Above Title</label>
+            <div class="label-desc">Mono-spaced small text. e.g. "Start a conversation · Any timezone".</div>
+            <input type="text" id="ctaEyebrow" placeholder="Start a conversation · Any timezone" />
           </div>
           <div class="field-row">
-            <div class="field"><label>Secondary Button Text</label><input type="text" id="ctaBtn2Text" /></div>
-            <div class="field"><label>Secondary Button Href</label><input type="text" id="ctaBtn2Href" /></div>
+            <div class="field">
+              <label>Title — Main text</label>
+              <div class="label-desc">Non-italic part. Note: the site inserts a line break before the italic word.</div>
+              <input type="text" id="ctaTitle" placeholder="Ready to build " />
+            </div>
+            <div class="field">
+              <label>Title — Italic (blue) part</label>
+              <input type="text" id="ctaTitleEm" placeholder="something coherent?" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Subtitle</label>
+            <textarea id="ctaSub" placeholder="Tell us what is slowing your business down..."></textarea>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Primary Button — Text</label>
+              <input type="text" id="ctaBtn1Text" placeholder="hello@nebulance.in" />
+            </div>
+            <div class="field">
+              <label>Primary Button — Link</label>
+              <div class="label-desc">Use <code>mailto:</code> prefix for email links.</div>
+              <input type="text" id="ctaBtn1Href" placeholder="mailto:hello@nebulance.in" />
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Secondary Button — Text</label>
+              <input type="text" id="ctaBtn2Text" placeholder="Book a 30-min call" />
+            </div>
+            <div class="field">
+              <label>Secondary Button — Link</label>
+              <input type="text" id="ctaBtn2Href" placeholder="https://cal.com" />
+            </div>
           </div>
         </div>
       </div>
 
       <!-- FOOTER -->
       <div class="tab-pane" data-pane="footer">
-        <div class="panel">
-          <div class="panel-title">Footer Brand</div>
-          <div class="field"><label>Description</label><textarea id="footerDesc"></textarea></div>
-          <div class="field"><label>Copyright Name</label><input type="text" id="footerCopyright" /></div>
-          <div class="field"><label>Bottom Status Text</label><input type="text" id="footerBottomText" /></div>
+        <div class="preview-strip">
+          <span>📍 <strong>Shows in:</strong> Bottom of page — brand, founder card, 3 link columns</span>
         </div>
 
         <div class="panel">
-          <div class="panel-title">Founder / CEO</div>
-          <div class="field-row">
-            <div class="field"><label>Name</label><input type="text" id="founderName" /></div>
-            <div class="field"><label>Title</label><input type="text" id="founderTitle" /></div>
-          </div>
-          <div class="field"><label>Email</label><input type="text" id="founderEmail" /></div>
+          <div class="panel-title">Footer Brand</div>
           <div class="field">
-            <label>Photo</label>
+            <label>Brand Description</label>
+            <div class="label-desc">Paragraph under the logo in the footer's left column.</div>
+            <textarea id="footerDesc" placeholder="An international engineering studio..."></textarea>
+          </div>
+          <div class="field">
+            <label>Copyright Name</label>
+            <div class="label-desc">Appears in "© 2026 <em>Name</em> · All rights reserved".</div>
+            <input type="text" id="footerCopyright" placeholder="Nebulance" />
+          </div>
+          <div class="field">
+            <label>Bottom Status Text</label>
+            <div class="label-desc">Right side of the bottom bar, next to a green dot.</div>
+            <input type="text" id="footerBottomText" placeholder="Systems operational · Response under 24h" />
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Founder / CEO Card</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Small card with a photo + name + title + email — inside the footer.</span>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Founder Name</label>
+              <input type="text" id="founderName" placeholder="Varshath G" />
+            </div>
+            <div class="field">
+              <label>Founder Title</label>
+              <input type="text" id="founderTitle" placeholder="Founder & CEO · Nebulance" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Founder Email</label>
+            <div class="label-desc">Shown as a clickable mailto link.</div>
+            <input type="text" id="founderEmail" placeholder="Varshath@nebulance.in" />
+          </div>
+          <div class="field">
+            <label>Founder Photo</label>
+            <div class="label-desc">Paste a URL, a path like <code>varshath.jpeg</code>, or upload from your device.</div>
             <div class="img-upload-row">
               <img id="founderPreview" class="img-preview" src="" alt="" />
-              <input type="text" id="founderPhoto" placeholder="URL or path" style="flex:1; min-width:200px;" />
+              <input type="text" id="founderPhoto" placeholder="varshath.jpeg or https://..." style="flex:1; min-width:200px;" />
               <label class="btn btn-secondary btn-sm" style="margin:0; cursor:pointer;">
                 Upload
                 <input type="file" accept="image/*" onchange="uploadImage(event, 'founderPhoto', 'founderPreview')" />
               </label>
             </div>
-            <div class="hint">URL, path, or upload (base64 inline).</div>
           </div>
         </div>
 
         <div class="panel">
-          <div class="panel-title">Footer Columns</div>
+          <div class="panel-title">Footer Link Columns</div>
+          <div class="preview-strip" style="margin-bottom:16px;">
+            <span>Three columns on the right of the footer. Each has a title and a list of links.</span>
+          </div>
           <div id="footerColsContainer"></div>
           <button class="btn btn-secondary btn-sm" onclick="addFooterCol()">+ Add Column</button>
         </div>
@@ -579,6 +881,7 @@ async function apiPut(action, body) {
 let state = structuredClone(DEFAULT_DATA);
 const $ = id => document.getElementById(id);
 const esc = s => (s == null ? "" : String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const escAttr = s => (s == null ? "" : String(s)).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const linesToArr = t => t.split("\n").map(l => l.trim()).filter(Boolean);
 const arrToLines = a => (a || []).join("\n");
 const pairsToArr = t => linesToArr(t).map(line => {
@@ -673,7 +976,6 @@ async function saveContent() {
    HYDRATE / COLLECT
    ========================================================= */
 function hydrateForm() {
-  // Safe-guard: ensure all sections exist (protects against partial saves)
   if (!state.hero.stats) state.hero.stats = [];
   if (!state.strip.items) state.strip.items = [];
   if (!state.coverage.regions) state.coverage.regions = [];
@@ -831,7 +1133,7 @@ function collectFormData() {
 }
 
 /* =========================================================
-   DYNAMIC RENDERERS
+   DYNAMIC RENDERERS — with clear labels + placeholders
    ========================================================= */
 function renderStats() {
   $("heroStatsContainer").innerHTML = state.hero.stats.map((s, i) => `
@@ -841,13 +1143,21 @@ function renderStats() {
         <button class="btn btn-danger btn-sm" onclick="removeStat(${i})">Remove</button>
       </div>
       <div class="field-row">
-        <div class="field"><label>Label</label><input type="text" value="${esc(s.label)}" oninput="state.hero.stats[${i}].label=this.value" /></div>
-        <div class="field"><label>Value</label><input type="text" value="${esc(s.value)}" oninput="state.hero.stats[${i}].value=this.value" /></div>
+        <div class="field">
+          <label>Small Label</label>
+          <div class="label-desc">Uppercase text above the value. e.g. "Based", "Clients".</div>
+          <input type="text" value="${escAttr(s.label)}" placeholder="Based" oninput="state.hero.stats[${i}].label=this.value" />
+        </div>
+        <div class="field">
+          <label>Big Value</label>
+          <div class="label-desc">The bolder text below the label.</div>
+          <input type="text" value="${escAttr(s.value)}" placeholder="Hyderabad · India" oninput="state.hero.stats[${i}].value=this.value" />
+        </div>
       </div>
     </div>
   `).join("");
 }
-function addStat() { state.hero.stats.push({ label: "Label", value: "Value" }); renderStats(); }
+function addStat() { state.hero.stats.push({ label: "New label", value: "New value" }); renderStats(); }
 function removeStat(i) { state.hero.stats.splice(i, 1); renderStats(); }
 
 function renderRegions() {
@@ -858,12 +1168,32 @@ function renderRegions() {
         <button class="btn btn-danger btn-sm" onclick="removeRegion(${i})">Remove</button>
       </div>
       <div class="field-row-3">
-        <div class="field"><label>Name</label><input type="text" value="${esc(r.name)}" oninput="state.coverage.regions[${i}].name=this.value" /></div>
-        <div class="field"><label>Flag</label><input type="text" value="${esc(r.flag)}" oninput="state.coverage.regions[${i}].flag=this.value" /></div>
-        <div class="field"><label>Timezone (IANA)</label><input type="text" value="${esc(r.tz)}" oninput="state.coverage.regions[${i}].tz=this.value" /></div>
+        <div class="field">
+          <label>Region Name</label>
+          <div class="label-desc">Text in the top-left of the card.</div>
+          <input type="text" value="${escAttr(r.name)}" placeholder="Americas" oninput="state.coverage.regions[${i}].name=this.value" />
+        </div>
+        <div class="field">
+          <label>Flag Emoji</label>
+          <div class="label-desc">Single emoji shown in the top-right circle.</div>
+          <input type="text" value="${escAttr(r.flag)}" placeholder="🇺🇸" oninput="state.coverage.regions[${i}].flag=this.value" />
+        </div>
+        <div class="field">
+          <label>IANA Timezone</label>
+          <div class="label-desc">Drives the live clock. e.g. <code>America/New_York</code>.</div>
+          <input type="text" value="${escAttr(r.tz)}" placeholder="America/New_York" oninput="state.coverage.regions[${i}].tz=this.value" />
+        </div>
       </div>
-      <div class="field"><label>Cities</label><input type="text" value="${esc(r.cities)}" oninput="state.coverage.regions[${i}].cities=this.value" /></div>
-      <div class="field"><label>Status</label><input type="text" value="${esc(r.status)}" oninput="state.coverage.regions[${i}].status=this.value" /></div>
+      <div class="field">
+        <label>Cities Line</label>
+        <div class="label-desc">Sits under the live time. Separate cities with " · ".</div>
+        <input type="text" value="${escAttr(r.cities)}" placeholder="New York · San Francisco · Toronto" oninput="state.coverage.regions[${i}].cities=this.value" />
+      </div>
+      <div class="field">
+        <label>Status Text</label>
+        <div class="label-desc">Bottom row, next to a green pulsing dot. e.g. "Clients active".</div>
+        <input type="text" value="${escAttr(r.status)}" placeholder="Clients active" oninput="state.coverage.regions[${i}].status=this.value" />
+      </div>
     </div>
   `).join("");
 }
@@ -878,11 +1208,27 @@ function renderServices() {
         <button class="btn btn-danger btn-sm" onclick="removeService(${i})">Remove</button>
       </div>
       <div class="field-row-3">
-        <div class="field"><label>Number</label><input type="text" value="${esc(s.num)}" oninput="state.services.items[${i}].num=this.value" /></div>
-        <div class="field"><label>Title</label><input type="text" value="${esc(s.title)}" oninput="state.services.items[${i}].title=this.value" /></div>
-        <div class="field"><label>Title (italic)</label><input type="text" value="${esc(s.titleEm)}" oninput="state.services.items[${i}].titleEm=this.value" /></div>
+        <div class="field">
+          <label>Card Number</label>
+          <div class="label-desc">Small mono label top-left. e.g. "01 / 06".</div>
+          <input type="text" value="${escAttr(s.num)}" placeholder="01 / 06" oninput="state.services.items[${i}].num=this.value" />
+        </div>
+        <div class="field">
+          <label>Title — Normal part</label>
+          <div class="label-desc">Non-italic text in the title.</div>
+          <input type="text" value="${escAttr(s.title)}" placeholder="AI Call " oninput="state.services.items[${i}].title=this.value" />
+        </div>
+        <div class="field">
+          <label>Title — Italic part</label>
+          <div class="label-desc">Second half of the title, shown in italic serif.</div>
+          <input type="text" value="${escAttr(s.titleEm)}" placeholder="Agents" oninput="state.services.items[${i}].titleEm=this.value" />
+        </div>
       </div>
-      <div class="field"><label>Description</label><textarea oninput="state.services.items[${i}].desc=this.value">${esc(s.desc)}</textarea></div>
+      <div class="field">
+        <label>Description</label>
+        <div class="label-desc">One short sentence shown below the title.</div>
+        <textarea placeholder="Voice systems that hold real conversations..." oninput="state.services.items[${i}].desc=this.value">${esc(s.desc)}</textarea>
+      </div>
     </div>
   `).join("");
 }
@@ -897,10 +1243,22 @@ function renderProcesses() {
         <button class="btn btn-danger btn-sm" onclick="removeProcess(${i})">Remove</button>
       </div>
       <div class="field-row">
-        <div class="field"><label>Number</label><input type="text" value="${esc(s.num)}" oninput="state.process.steps[${i}].num=this.value" /></div>
-        <div class="field"><label>Title</label><input type="text" value="${esc(s.title)}" oninput="state.process.steps[${i}].title=this.value" /></div>
+        <div class="field">
+          <label>Step Number</label>
+          <div class="label-desc">e.g. "01 / 04". Shown on the left in blue.</div>
+          <input type="text" value="${escAttr(s.num)}" placeholder="01 / 04" oninput="state.process.steps[${i}].num=this.value" />
+        </div>
+        <div class="field">
+          <label>Step Title</label>
+          <div class="label-desc">Big bold text in the middle column.</div>
+          <input type="text" value="${escAttr(s.title)}" placeholder="Audit & Deconstruct" oninput="state.process.steps[${i}].title=this.value" />
+        </div>
       </div>
-      <div class="field"><label>Description</label><textarea oninput="state.process.steps[${i}].desc=this.value">${esc(s.desc)}</textarea></div>
+      <div class="field">
+        <label>Step Description</label>
+        <div class="label-desc">Right column paragraph.</div>
+        <textarea placeholder="We map every workflow..." oninput="state.process.steps[${i}].desc=this.value">${esc(s.desc)}</textarea>
+      </div>
     </div>
   `).join("");
 }
@@ -915,12 +1273,31 @@ function renderPrinciples() {
         <button class="btn btn-danger btn-sm" onclick="removePrinciple(${i})">Remove</button>
       </div>
       <div class="field-row-3">
-        <div class="field"><label>Icon</label><input type="text" value="${esc(p.icon)}" oninput="state.principles.items[${i}].icon=this.value" /></div>
-        <div class="field"><label>Number</label><input type="text" value="${esc(p.num)}" oninput="state.principles.items[${i}].num=this.value" /></div>
-        <div class="field"><label>Title</label><input type="text" value="${esc(p.title)}" oninput="state.principles.items[${i}].title=this.value" /></div>
+        <div class="field">
+          <label>Icon Glyph</label>
+          <div class="label-desc">A single character or symbol shown in the icon box. Try: ⌁ ∞ ◎ ◆ ✦ ✧ ⬡ ◈.</div>
+          <input type="text" value="${escAttr(p.icon)}" placeholder="⌁" oninput="state.principles.items[${i}].icon=this.value" />
+        </div>
+        <div class="field">
+          <label>Card Number</label>
+          <div class="label-desc">Small mono label top-right. e.g. "01 / 03".</div>
+          <input type="text" value="${escAttr(p.num)}" placeholder="01 / 03" oninput="state.principles.items[${i}].num=this.value" />
+        </div>
+        <div class="field">
+          <label>Title — Normal part</label>
+          <input type="text" value="${escAttr(p.title)}" placeholder="Engineering-grade " oninput="state.principles.items[${i}].title=this.value" />
+        </div>
       </div>
-      <div class="field"><label>Title (italic)</label><input type="text" value="${esc(p.titleEm)}" oninput="state.principles.items[${i}].titleEm=this.value" /></div>
-      <div class="field"><label>Description</label><textarea oninput="state.principles.items[${i}].desc=this.value">${esc(p.desc)}</textarea></div>
+      <div class="field">
+        <label>Title — Italic part</label>
+        <div class="label-desc">Second half of the title in italic serif.</div>
+        <input type="text" value="${escAttr(p.titleEm)}" placeholder="precision" oninput="state.principles.items[${i}].titleEm=this.value" />
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <div class="label-desc">Two-sentence explanation below the title.</div>
+        <textarea placeholder="Every system is designed, tested, and refined..." oninput="state.principles.items[${i}].desc=this.value">${esc(p.desc)}</textarea>
+      </div>
     </div>
   `).join("");
 }
@@ -934,15 +1311,28 @@ function renderReviews() {
         <div class="item-card-title">Review ${i + 1}</div>
         <button class="btn btn-danger btn-sm" onclick="removeReview(${i})">Remove</button>
       </div>
-      <div class="field"><label>Quote (HTML &lt;em&gt; allowed)</label><textarea oninput="state.reviews.items[${i}].quote=this.value">${esc(r.quote)}</textarea></div>
+      <div class="field">
+        <label>Quote Text</label>
+        <div class="label-desc">Wrap a word with <code>&lt;em&gt;word&lt;/em&gt;</code> to make it italic blue. Quotes render inside double quotes automatically.</div>
+        <textarea placeholder="Nebulance replaced three tools..." oninput="state.reviews.items[${i}].quote=this.value">${esc(r.quote)}</textarea>
+      </div>
       <div class="field-row-3">
-        <div class="field"><label>Name</label><input type="text" value="${esc(r.name)}" oninput="state.reviews.items[${i}].name=this.value" /></div>
-        <div class="field"><label>Role</label><input type="text" value="${esc(r.role)}" oninput="state.reviews.items[${i}].role=this.value" /></div>
         <div class="field">
-          <label>Avatar</label>
+          <label>Author Name</label>
+          <div class="label-desc">Bold line at bottom of card.</div>
+          <input type="text" value="${escAttr(r.name)}" placeholder="Arjun Mehta" oninput="state.reviews.items[${i}].name=this.value" />
+        </div>
+        <div class="field">
+          <label>Author Role / Company</label>
+          <div class="label-desc">Grey text under the name. Use " · " to separate.</div>
+          <input type="text" value="${escAttr(r.role)}" placeholder="Founder · Vertex Realty · Dubai" oninput="state.reviews.items[${i}].role=this.value" />
+        </div>
+        <div class="field">
+          <label>Avatar Image</label>
+          <div class="label-desc">URL, path, or upload from device.</div>
           <div class="img-upload-row">
-            <img class="img-preview" src="${esc(r.avatar)}" alt="" style="width:40px;height:40px;" />
-            <input type="text" value="${esc(r.avatar)}" oninput="state.reviews.items[${i}].avatar=this.value" style="flex:1;min-width:100px;" />
+            <img class="img-preview" src="${escAttr(r.avatar)}" alt="" style="width:40px;height:40px;" />
+            <input type="text" value="${escAttr(r.avatar)}" placeholder="https://..." oninput="state.reviews.items[${i}].avatar=this.value" style="flex:1;min-width:100px;" />
             <label class="btn btn-secondary btn-sm" style="margin:0;cursor:pointer;">
               Upload
               <input type="file" accept="image/*" onchange="uploadReviewImage(event, ${i})" />
@@ -953,7 +1343,7 @@ function renderReviews() {
     </div>
   `).join("");
 }
-function addReview() { state.reviews.items.push({ quote: "New review.", name: "Name", role: "Role · Company", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80&auto=format&fit=crop" }); renderReviews(); }
+function addReview() { state.reviews.items.push({ quote: "New review text.", name: "Name", role: "Role · Company", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80&auto=format&fit=crop" }); renderReviews(); }
 function removeReview(i) { state.reviews.items.splice(i, 1); renderReviews(); }
 
 function renderFooterCols() {
@@ -963,8 +1353,16 @@ function renderFooterCols() {
         <div class="item-card-title">Column ${i + 1}</div>
         <button class="btn btn-danger btn-sm" onclick="removeFooterCol(${i})">Remove</button>
       </div>
-      <div class="field"><label>Column Title</label><input type="text" value="${esc(c.title)}" oninput="state.footer.columns[${i}].title=this.value" /></div>
-      <div class="field"><label>Links (Label|Href per line)</label><textarea oninput="state.footer.columns[${i}].links=pairsToArr(this.value)">${arrToPairs(c.links)}</textarea></div>
+      <div class="field">
+        <label>Column Heading</label>
+        <div class="label-desc">Small uppercase title above the links. e.g. "Navigate".</div>
+        <input type="text" value="${escAttr(c.title)}" placeholder="Navigate" oninput="state.footer.columns[${i}].title=this.value" />
+      </div>
+      <div class="field">
+        <label>Links</label>
+        <div class="label-desc">One link per line. Format: <code style="background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;">Label|href</code></div>
+        <textarea placeholder="Services|#services&#10;Coverage|#coverage" oninput="state.footer.columns[${i}].links=pairsToArr(this.value)">${arrToPairs(c.links)}</textarea>
+      </div>
     </div>
   `).join("");
 }
